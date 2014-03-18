@@ -8,26 +8,51 @@
 
 import string 
 import re
+from collections import defaultdict
 from collections import Counter
+import glob
+import os
+import sys
+print(sys.stdout.encoding)
 
 # Words to remove
-noise_words_set = {'utc','2014rt','the','to','of','a','in','is','and','on','that',
+noise_words_set = {'utc','mar','2014rt','the','to','of','a','in','is','and','on','that',
 'be','for','with','about','not','at','you','this','from'}
 
-# Read file
-txt = open(r'C:\Users\graem_000\Desktop\Tweet Logs\log_13__07_03_2014.txt','r', encoding="utf8").read()
 
-# Remove punctuation
-for punct in string.punctuation:
-    txt = txt.replace(punct,"")
+# Find files
+path = r"C:\Users\graem_000\Desktop"
+os.chdir(path)
+print("Processing files...")
+for file in glob.glob("*.txt"):
 
-# Split into words and make lower case
-words = txt.split()
-words = [item.lower() for item in words]
+	# Read file
+	txt = open("{}\{}".format(path, file),'r', encoding="utf8").read()
 
-# Print most common words that are no
-c=Counter(words)
-for w in c.most_common(10):
-	u, v = w
-	if u not in noise_words_set:
-		print(w),
+	# Remove punctuation
+	for punct in string.punctuation:
+	    txt = txt.replace(punct,"")
+
+	# Split into words and make lower case
+	words = txt.split()
+	words = [item.lower() for item in words]
+
+	# Remove unintersting words
+	y = [w for w in words if w not in noise_words_set]
+	words = y
+
+	# Make a dictionary of words
+	D = defaultdict(int)
+	for word in words:
+	    D[word] += 1
+
+	# Count the most frequent words
+	c = Counter(D)
+	print(u"%s" % c.most_common(20))
+
+# # Print most common words that are no
+# c = Counter([values[1] for values in D.items()])
+# for w in c.most_common(59):
+# 	u, v = w
+# 	if u not in noise_words_set:
+# 		print(w),
