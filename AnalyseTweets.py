@@ -16,7 +16,7 @@ import sys
 print(sys.stdout.encoding)
 
 # Words to remove
-noise_words_set = {'utc','mar','2014rt','the','to','of','a','in','is','and','on','that',
+noise_words_set = {'14','utc','mar','2014rt','the','to','of','a','in','is','and','on','that',
 'be','for','with','about','not','at','you','this','from'}
 
 
