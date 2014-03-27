@@ -6,53 +6,61 @@
  * March 2014
  ******************************************************************'''
 
+'''FUNCTIONS'''
+def chunker(seq, size):
+    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
+
+
+'''MAIN'''
 import string 
-import re
 from collections import defaultdict
 from collections import Counter
 import glob
 import os
-import sys
-print(sys.stdout.encoding)
+import re
+
 
 # Words to remove
-noise_words_set = {'14','utc','mar','2014rt','the','to','of','a','in','is','and','on','that',
-'be','for','with','about','not','at','you','this','from'}
+noise_words_set = {'01','02','03','04','05','06','07','08','09','10',
+'11','12','13','14','15','16','17','18','19','20',
+'21','22','23','24','25','26','27','28','29','30','31',
+'utc','mar','2014rt','the','to','of','a','in','is','and','on','that',
+'be','for','with','about','not','at','you','this','from','【✔】',' 👍 ','…','é','è','í','í','❞','💙','❝❞'}
 
-
-# Find files
-path = r"C:\Users\graem_000\Desktop"
+# Find file_dict
+path = r"C:\Users\graem_000\Desktop\Tweet Logs"
 os.chdir(path)
-print("Processing files...")
+
+file_dict = dict()
+
 for file in glob.glob("*.txt"):
+
+	print(file)
 
 	# Read file
 	txt = open("{}\{}".format(path, file),'r', encoding="utf8").read()
 
-	# Remove punctuation
-	for punct in string.punctuation:
-	    txt = txt.replace(punct,"")
+	# Remove non alphanumeric charcters
+	new = ''
+	# pattern = re.compile('[^a-zA-Z\d\s:]')
+	pattern = re.compile('[^a-zA-Z:]')
+
+	for group in chunker(txt, 4096):
+		group = pattern.sub(' ', group)
+		new = new + group
+	txt = new
 
 	# Split into words and make lower case
-	words = txt.split()
-	words = [item.lower() for item in words]
+	words = [item.lower() for item in txt.split()]
 
 	# Remove unintersting words
-	y = [w for w in words if w not in noise_words_set]
-	words = y
+	words = [w for w in words if w not in noise_words_set]
 
 	# Make a dictionary of words
-	D = defaultdict(int)
-	for word in words:
-	    D[word] += 1
+	word_count = Counter(words)
+	file_dict[file] = word_count
 
-	# Count the most frequent words
-	c = Counter(D)
-	print(u"%s" % c.most_common(20))
-
-# # Print most common words that are no
-# c = Counter([values[1] for values in D.items()])
-# for w in c.most_common(59):
-# 	u, v = w
-# 	if u not in noise_words_set:
-# 		print(w),
+	for key, value in file_dict[file].items():
+		if (value > 50):
+			print(key, value)
+	print('\n')
