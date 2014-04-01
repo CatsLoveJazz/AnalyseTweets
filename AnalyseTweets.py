@@ -35,10 +35,10 @@ os.chdir(path)
 
 file_dict = dict()
 n=0
+salmond = []
+cameron = []
 
 for file in glob.glob("*.txt"):
-
-	# print(file)
 
 	# Read file
 	txt = open("{}\{}".format(path, file),'r', encoding="utf8").read()
@@ -65,10 +65,19 @@ for file in glob.glob("*.txt"):
 	word_count = Counter(words)
 	file_dict[file] = word_count
 
-	for key, value in file_dict[file].items():
-		# if (key=="no"):# or (key=="no")): 
-		if (value>50):
-			print(key, value),
-	print('\n')
+	salmond.append(0);
+	cameron.append(0);
 
+	for key, value in file_dict[file].items():
+		if ((key=="salmond") or (key=="alexsalmond")): 
+			salmond[n] += value
+		elif ((key=="cameron") or (key=="davidcameron")): 
+			cameron[n] += value
+
+	print("Salmond : %d" % salmond[n])
+	print("Cameron : %d" % cameron[n])
 	n+=1
+
+print(salmond)
+print(cameron)
+
