@@ -19,6 +19,8 @@ import glob
 import os
 import re
 
+# f = open('result.csv', 'w')
+
 
 # Words to remove
 noise_words_set = {'01','02','03','04','05','06','07','08','09','10',
@@ -32,10 +34,11 @@ path = r"C:\Users\graem_000\Desktop\Tweet Logs"
 os.chdir(path)
 
 file_dict = dict()
+n=0
 
 for file in glob.glob("*.txt"):
 
-	print(file)
+	# print(file)
 
 	# Read file
 	txt = open("{}\{}".format(path, file),'r', encoding="utf8").read()
@@ -56,11 +59,16 @@ for file in glob.glob("*.txt"):
 	# Remove unintersting words
 	words = [w for w in words if w not in noise_words_set]
 
+
+
 	# Make a dictionary of words
 	word_count = Counter(words)
 	file_dict[file] = word_count
 
 	for key, value in file_dict[file].items():
-		if (value > 50):
-			print(key, value)
+		# if (key=="no"):# or (key=="no")): 
+		if (value>50):
+			print(key, value),
 	print('\n')
+
+	n+=1
