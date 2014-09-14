@@ -1,5 +1,7 @@
+import re
+
 words_to_ignore = []
-things_to_strip = ["|start|","|end|",".",",","?",")","(","\"",":",";","'s"]
+things_to_strip = ["|start|","|end|",".",",","?",")","(","\"",":",";","'s","|","'","=","#"]
 words_min_size = 4
 
 #------------------------------------------------------------------------------
@@ -9,7 +11,7 @@ def CountWords(text):
 	for word in words:
 		for thing in things_to_strip:
 			if thing in word:
-				word = word.replace(thing,"")
+				word = word.translate(None, ''.join(things_to_strip))
 		if word not in words_to_ignore and len(word) >= words_min_size:
 			if word in wordcount:
 				wordcount[word] += 1
@@ -19,5 +21,9 @@ def CountWords(text):
 
 
 #------------------------------------------------------------------------------
-def CountWordOccurance(match):
-	
+def CountWordOccurance(wordcount, key_list):
+	count = 0;
+	for key in key_list:
+		if key in wordcount:
+			count = wordcount[key]
+		return count
